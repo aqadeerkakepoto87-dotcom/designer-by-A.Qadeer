@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A.Qadeer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 5%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #1e3c72;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 8rem 1rem 2rem;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem auto;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.1rem;
+        }
+
+        .stat-item i {
+            margin-right: 10px;
+            color: #ffd700;
+        }
+
+        /* Topics Section */
+        .topics-section {
+            padding: 2rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: white;
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+            animation: fadeInUp 1s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .topic-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .topic-card h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .topic-card p {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .topic-meta {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: #e9ecef;
+            color: #1e3c72;
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-start:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Quiz Overlay */
+        .quiz-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .quiz-container {
+            max-width: 1000px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 30px;
+            padding: 2rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        .close-quiz {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .close-quiz:hover {
+            background: #dc3545;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .quiz-header h2 {
+            color: #1e3c72;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .quiz-header h2 i {
+            margin-right: 10px;
+        }
+
+        .quiz-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0;
+            color: #666;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .timer {
+            background: #dc3545;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timer.warning {
+            background: #ffc107;
+            color: #333;
+            animation: pulse 1s infinite;
+        }
+
+        .timer.danger {
+            background: #dc3545;
+            color: white;
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .question-card {
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #1e3c72;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .option {
+            padding: 1rem 1.5rem;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }
+
+        .option:hover {
+            border-color: #1e3c72;
+            background: #f0f0f0;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: #1e3c72;
+            color: white;
+            border-color: #1e3c72;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 1rem;
+            display: none;
+        }
+
+        .option label {
+            cursor: pointer;
+            color: inherit;
+            width: 100%;
+        }
+
+        .option strong {
+            margin-right: 10px;
+        }
+
+        .question-nav {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .nav-btn {
+            width: 45px;
+            height: 45px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            border-color: #1e3c72;
+            background: #f0f0f0;
+            transform: scale(1.1);
+        }
+
+        .nav-btn.active {
+            background: #1e3c72;
+            color: white;
+            border-color: #1e3c72;
+        }
+
+        .nav-btn.answered {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .nav-btn.current.answered {
+            background: #1e3c72;
+            border-color: #1e3c72;
+            position: relative;
+        }
+
+        .quiz-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-prev {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-prev:hover:not(:disabled) {
+            background: #5a6268;
+            transform: translateX(-5px);
+        }
+
+        .btn-next {
+            background: #1e3c72;
+            color: white;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            background: #2a5298;
+            transform: translateX(5px);
+        }
+
+        .btn-submit {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Result Overlay */
+        .result-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .result-container {
+            max-width: 700px;
+            width: 100%;
+            background: white;
+            border-radius: 30px;
+            padding: 2rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            animation: slideIn 0.3s ease;
+            text-align: center;
+        }
+
+        .close-result {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .close-result:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        .result-badge {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .result-badge svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .result-badge circle {
+            fill: none;
+            stroke-width: 20;
+            stroke-linecap: round;
+        }
+
+        .result-badge .bg-circle {
+            stroke: #f0f0f0;
+        }
+
+        .result-badge .progress-circle {
+            stroke: #1e3c72;
+            stroke-dasharray: 565.48;
+            stroke-dashoffset: 565.48;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .result-percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .result-details {
+            margin-bottom: 2rem;
+        }
+
+        .result-details p {
+            font-size: 1.2rem;
+            color: #555;
+            margin: 0.8rem 0;
+        }
+
+        .result-details .marks {
+            font-size: 3rem;
+            color: #1e3c72;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-box {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .feedback-box.excellent {
+            background: #d4edda;
+            color: #155724;
+            border-left: 5px solid #28a745;
+        }
+
+        .feedback-box.good {
+            background: #fff3cd;
+            color: #856404;
+            border-left: 5px solid #ffc107;
+        }
+
+        .feedback-box.needs-work {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 5px solid #dc3545;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: #1e3c72;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            background: #2a5298;
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: scale(1.05);
+        }
+
+        /* About Section */
+        .about-section {
+            background: white;
+            border-radius: 30px 30px 0 0;
+            padding: 4rem 5%;
+            margin-top: 3rem;
+        }
+
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            color: #1e3c72;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .features-list li {
+            margin-bottom: 1rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .features-list i {
+            color: #1e3c72;
+            font-size: 1.2rem;
+        }
+
+        .about-image {
+            text-align: center;
+        }
+
+        .about-image i {
+            font-size: 12rem;
+            color: #1e3c72;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: white;
+            opacity: 0.8;
+            background: rgba(0,0,0,0.2);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-footer {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .quick-stats {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .stat-item {
+                width: 90%;
+                text-align: center;
+            }
+
+            .topic-card {
+                margin: 0 1rem;
+            }
+
+            .question-nav {
+                padding: 0.5rem;
+            }
+
+            .nav-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+            /* Stylish Watermark */
+            .watermark {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(-30deg);
+                font-size: 90px;
+                font-weight: bold;
+                color: rgba(255, 255, 255, 0.05); /* halka transparent */
+                pointer-events: none; /* click block nahi karega */
+                z-index: 0;
+                white-space: nowrap;
+            }
+        }
+    </style>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-flask"></i>
+            Sahal Acadmey Nawabshah
+            Chemistry MCQs Test
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="homePage">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>👉Welcome to My Website👍</h1>
+            <h1><i class="fas fa-flask"></i>𝑪𝒉𝒆𝒎𝒊𝒔𝒕𝒓𝒚 𝑴𝑪𝑸𝒔 𝑶𝒏𝒍𝒊𝒏𝒆 𝑷𝒓𝒂𝒄𝒕𝒊𝒄𝒆 𝑻𝒆𝒔𝒕 2026</h1>
+            <p>50 Important Chemistry Multiple Choice Questions</p>
+        </div>
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-item">
+                <i class="fas fa-question-circle"></i> 50 Questions
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-clock"></i> 40 Minutes
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-trophy"></i> Instant Results
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-chart-line"></i> Detailed Analysis
+            </div>
+        </div>
+
+        <!-- Topics Section -->
+        <div class="topics-section">
+            <h2 class="section-title">
+                <i class="fas fa-microscope"></i> Chemistry Topics
+            </h2>
+            <div class="topics-grid">
+                <!-- General Chemistry Card -->
+                <div class="topic-card">
+                    <div class="topic-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3>General Chemistry</h3>
+                    <p>Fundamental concepts of chemistry including atomic structure, periodic table, and chemical bonding</p>
+                    <div class="topic-meta">
+                        <span class="badge"><i class="fas fa-question-circle"></i> 50 Questions</span>
+                        <span class="badge"><i class="fas fa-clock"></i> 40 min</span>
+                        <span class="badge"><i class="fas fa-signal"></i> All Topics</span>
+                    </div>
+                    <button class="btn-start" onclick="startQuiz()">
+                        <i class="fas fa-play"></i> Start Full Test
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div class="about-section">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2><i class="fas fa-info-circle"></i> About This Test</h2>
+                    <p>Yeh test aapki Chemistry knowledge ko check karne ke liye 50 important multiple choice questions par based hai. Ye questions aapki tayari ko next level par le jayenge.</p>
+                    
+                    <ul class="features-list">
+                        <li><i class="fas fa-check-circle"></i> 50 High-Quality MCQs</li>
+                        <li><i class="fas fa-check-circle"></i> 40 Minutes Timer</li>
+                        <li><i class="fas fa-check-circle"></i> Atomic Structure</li>
+                        <li><i class="fas fa-check-circle"></i> Chemical Bonding</li>
+                        <li><i class="fas fa-check-circle"></i> Periodic Table</li>
+                        <li><i class="fas fa-check-circle"></i> Acids and Bases</li>
+                        <li><i class="fas fa-check-circle"></i> Nuclear Chemistry</li>
+                        <li><i class="fas fa-check-circle"></i> Organic Chemistry</li>
+                    </ul>
+                </div>
+                <div class="about-image">
+                    <i class="fas fa-atom"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Overlay -->
+    <div id="quizOverlay" class="quiz-overlay">
+        <div class="quiz-container">
+            <button class="close-quiz" onclick="closeQuiz()"><i class="fas fa-times"></i></button>
+            
+            <div class="quiz-header">
+                <h2><i class="fas fa-flask"></i> Chemistry MCQs Test</h2>
+                <div class="quiz-meta">
+                    <span id="questionCounter">Question 1 of 50</span>
+                    <div class="timer" id="timer">
+                        <i class="fas fa-hourglass-half"></i>
+                        <span id="timeDisplay">40:00</span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 2%"></div>
+                </div>
+            </div>
+
+            <div id="questionContainer">
+                <!-- Questions will be inserted here -->
+            </div>
+
+            <div class="question-nav" id="questionNav">
+                <!-- Navigation buttons will be inserted here -->
+            </div>
+
+            <div class="quiz-footer">
+                <button class="btn btn-prev" id="prevBtn" onclick="prevQuestion()" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="btn btn-submit" id="submitBtn" onclick="submitQuiz()" style="display: none;">
+                    <i class="fas fa-check-circle"></i> Submit Test
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Overlay -->
+    <div id="resultOverlay" class="result-overlay">
+        <div class="result-container">
+            <button class="close-result" onclick="closeResult()"><i class="fas fa-times"></i></button>
+            
+            <div class="result-header">
+                <h2><i class="fas fa-flask"></i> Test Result</h2>
+                <p>Thank you for completing the test!</p>
+            </div>
+
+            <div class="result-badge">
+                <svg viewBox="0 0 200 200">
+                    <circle class="bg-circle" cx="100" cy="100" r="90"></circle>
+                    <circle class="progress-circle" cx="100" cy="100" r="90" id="progressCircle"></circle>
+                </svg>
+                <div class="result-percentage" id="scorePercentage">0%</div>
+            </div>
+
+            <div class="result-details">
+                <p class="marks" id="scoreMarks">0 / 50</p>
+                <p id="correctCount"><i class="fas fa-check-circle" style="color: #28a745;"></i> Correct: 0</p>
+                <p id="incorrectCount"><i class="fas fa-times-circle" style="color: #dc3545;"></i> Incorrect: 0</p>
+                <p id="unansweredCount"><i class="fas fa-question-circle" style="color: #ffc107;"></i> Unanswered: 50</p>
+                <p id="timeTaken"><i class="fas fa-hourglass-half"></i> Time Taken: 0:00</p>
+            </div>
+
+            <div class="feedback-box" id="feedbackMessage">
+                Keep practicing! Aap improve kar sakte hain.
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-primary" onclick="restartQuiz()">
+                    <i class="fas fa-redo-alt"></i> Try Again
+                </button>
+                <button class="btn-secondary" onclick="closeResult()">
+                    <i class="fas fa-home"></i> Back to Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p><i class="far fa-copyright"></i> 2026 Chemistry MCQs Practice. All rights reserved.</p>
+        <p>👑 Website Owner – Sir Zeeshan</p>
+        <p>💻 Website Designer – A.Qadeer</p>
+    </footer>
+
+    <script>
+        // All 50 Chemistry Questions from the image
+        const questions = [
+            {
+                question: "Carbon dioxide was discovered by:",
+                options: ["J. Priestley", "Lavoisier", "J. Black", "Scheele"],
+                correct: 2 // J. Black
+            },
+            {
+                question: "Theory of acids and bases based on ion dissociation was proposed by:",
+                options: ["Niels Bohr", "Arrhenius", "Petit", "Rutherford"],
+                correct: 1 // Arrhenius
+            },
+            {
+                question: "Study of hydrocarbons is known as:",
+                options: ["Inorganic Chemistry", "Organic Chemistry", "Physical Chemistry", "Biochemistry"],
+                correct: 1 // Organic Chemistry
+            },
+            {
+                question: "Nucleus of an atom and its properties are studied in:",
+                options: ["Nuclear Chemistry", "Medicinal Chemistry", "Biochemistry", "Green Chemistry"],
+                correct: 0 // Nuclear Chemistry
+            },
+            {
+                question: "Same kind of matter is known as:",
+                options: ["Element", "Molecule", "Compound", "Mixture"],
+                correct: 0 // Element
+            },
+            {
+                question: "The purest form of matter is known as:",
+                options: ["Element", "Atom", "Substance", "Mixture"],
+                correct: 2 // Substance
+            },
+            {
+                question: "The valency of Aluminium is:",
+                options: ["+3", "-3", "-2", "+2"],
+                correct: 0 // +3
+            },
+            {
+                question: "CH₂O is the empirical formula of:",
+                options: ["C₆H₁₂O₆", "CHO", "C₂H₄O₂", "C₇H₁₄O₇"],
+                correct: 0 // C₆H₁₂O₆
+            },
+            {
+                question: "Molecular mass of NH₃ is:",
+                options: ["17 g/mol", "34 g/mol", "17 a.m.u", "34 a.m.u"],
+                correct: 0 // 17 g/mol
+            },
+            {
+                question: "Mass of water (H₂O) in one mole is:",
+                options: ["18 g", "9 g", "20 g", "25 g"],
+                correct: 0 // 18 g
+            },
+            {
+                question: "Atom or element having negative charge is called:",
+                options: ["Ion", "Cation", "Anion", "Molecular ion"],
+                correct: 2 // Anion
+            },
+            {
+                question: "Elements having odd number of electrons in outer shell are called:",
+                options: ["Cation", "Anion", "Molecular ion", "Free radical"],
+                correct: 3 // Free radical
+            },
+            {
+                question: "Number of atoms in 0.5 mole of Na is:",
+                options: ["3.01 × 10²³", "6.02 × 10²³", "1.5 × 10²³", "8.1 × 10²³"],
+                correct: 0 // 3.01 × 10²³
+            },
+            {
+                question: "Mass of CO₂ in 4 moles is:",
+                options: ["176 g", "180 g", "190 g", "130 g"],
+                correct: 0 // 176 g
+            },
+            {
+                question: "Electron was discovered by:",
+                options: ["Artificial radioactivity", "Alpha rays", "Beta rays", "Discharge tube rays"],
+                correct: 3 // Discharge tube rays
+            },
+            {
+                question: "Name of electron was suggested by:",
+                options: ["Rutherford", "J.J. Thomson", "William Crookes", "Stoney"],
+                correct: 3 // Stoney
+            },
+            {
+                question: "Neutron was discovered by:",
+                options: ["J.J. Thomson", "Rutherford", "James Chadwick", "Niels Bohr"],
+                correct: 2 // James Chadwick
+            },
+            {
+                question: "Charge to mass ratio (e/m) is:",
+                options: ["1.7588 × 10⁻¹¹ C/kg", "2.66 × 10⁻¹¹ C/kg", "2.33 × 10⁻¹¹ C/kg", "None"],
+                correct: 0 // 1.7588 × 10⁻¹¹ C/kg
+            },
+            {
+                question: "Name of proton was suggested by:",
+                options: ["Goldstein", "Chadwick", "Rutherford", "Stoney"],
+                correct: 2 // Rutherford
+            },
+            {
+                question: "Which has the greatest penetrating power?",
+                options: ["Alpha particle", "Electron", "Proton", "Neutron"],
+                correct: 3 // Neutron
+            },
+            {
+                question: "The L-shell has how many sub-shells?",
+                options: ["1", "2", "3", "4"],
+                correct: 1 // 2
+            },
+            {
+                question: "d-subshell can hold how many electrons?",
+                options: ["6", "10", "12", "14"],
+                correct: 1 // 10
+            },
+            {
+                question: "Shape of p-orbital is:",
+                options: ["Spherical", "Dumbbell", "Double dumbbell", "Complex"],
+                correct: 1 // Dumbbell
+            },
+            {
+                question: "Shape of d-orbital is:",
+                options: ["Spherical", "Dumbbell", "Double dumbbell", "Complex"],
+                correct: 2 // Double dumbbell
+            },
+            {
+                question: "Which isotope is used for treatment of skin cancer?",
+                options: ["P-32", "Strontium-90", "Both", "Cobalt-60"],
+                correct: 1 // Strontium-90
+            },
+            {
+                question: "Longest period of periodic table is:",
+                options: ["4th", "3rd", "6th", "7th"],
+                correct: 2 // 6th
+            },
+            {
+                question: "Properties of elements depend upon:",
+                options: ["Electrons", "Protons", "Neutrons", "Atomic mass"],
+                correct: 0 // Electrons
+            },
+            {
+                question: "Group containing elements in allotropic form is:",
+                options: ["VIA Group", "VIIA Group", "IA Group", "IIA Group"],
+                correct: 0 // VIA Group
+            },
+            {
+                question: "Father of periodic table is:",
+                options: ["Moseley", "Niels Bohr", "Mendeleev", "Rutherford"],
+                correct: 2 // Mendeleev
+            },
+            {
+                question: "Highest electronegative group is:",
+                options: ["IA", "IIA", "VIIA", "VIIA"],
+                correct: 2 // VIIA
+            },
+            {
+                question: "Sodium (Na) loses how many electrons to attain Ne configuration?",
+                options: ["1", "2", "3", "4"],
+                correct: 0 // 1
+            },
+            {
+                question: "Lowest electronegative element is:",
+                options: ["F", "Ne", "Cs", "Cl"],
+                correct: 2 // Cs
+            },
+            {
+                question: "All d-block elements are:",
+                options: ["Metals", "Non-metals", "Gases", "Metalloids"],
+                correct: 0 // Metals
+            },
+            {
+                question: "Which remains constant across a period?",
+                options: ["Electronegativity", "Ionization potential", "Ionization energy", "Shielding effect"],
+                correct: 3 // Shielding effect
+            },
+            {
+                question: "Periodic table is divided into how many blocks?",
+                options: ["1", "2", "3", "4"],
+                correct: 3 // 4
+            },
+            {
+                question: "Elements of VIIA group are called:",
+                options: ["Lanthanides", "Actinides", "Halogens", "Noble gases"],
+                correct: 2 // Halogens
+            },
+            {
+                question: "All transition elements are:",
+                options: ["Gases", "Metals", "Non-metals", "Metalloids"],
+                correct: 1 // Metals
+            },
+            {
+                question: "Concept of ionic bond was developed by:",
+                options: ["W. Kossel", "G.N. Lewis", "Rutherford", "Niels Bohr"],
+                correct: 0 // W. Kossel
+            },
+            {
+                question: "Atoms form chemical bonds to attain:",
+                options: ["Molecule", "Compound", "Mixture", "Stability"],
+                correct: 3 // Stability
+            },
+            {
+                question: "How many types of chemical bonds are there?",
+                options: ["1", "2", "3", "4"],
+                correct: 2 // 3
+            },
+            {
+                question: "Covalent bond is formed between:",
+                options: ["Metals", "Non-metals", "Metalloids", "All"],
+                correct: 1 // Non-metals
+            },
+            {
+                question: "During covalent bonding atoms:",
+                options: ["Lose electrons", "Share electrons", "Share protons", "None"],
+                correct: 1 // Share electrons
+            },
+            {
+                question: "Bond formed between IA and VIIA groups is:",
+                options: ["Ionic", "Covalent", "Coordinate", "All"],
+                correct: 0 // Ionic
+            },
+            {
+                question: "Strongest bond is:",
+                options: ["Ionic", "Covalent", "Coordinate", "Single covalent"],
+                correct: 1 // Covalent
+            },
+            {
+                question: "Polar molecules are soluble in:",
+                options: ["Organic solvents", "Polar solvents", "Non-polar solvents", "All"],
+                correct: 1 // Polar solvents
+            },
+            {
+                question: "Number of electrons lost by group A atoms equals:",
+                options: ["1", "2", "3", "4"],
+                correct: 0 // 1
+            },
+            {
+                question: "In NaCl crystal lattice, each Na⁺ is surrounded by:",
+                options: ["6 Cl⁻ ions", "6 Na⁺ ions", "8 Cl⁻ ions", "12 Cl⁻ ions"],
+                correct: 0 // 6 Cl⁻ ions
+            },
+            {
+                question: "Strength of intermolecular forces from ionic to covalent is:",
+                options: ["Weaker", "Stronger", "Equal", "None"],
+                correct: 0 // Weaker
+            },
+            {
+                question: "Example of ionic compound is:",
+                options: ["Hg", "CH₄", "NaCl", "HCl"],
+                correct: 2 // NaCl
+            },
+            {
+                question: "Ability to attract shared pair of electrons is called:",
+                options: ["Electron affinity", "Electronegativity", "Ionization energy", "Shielding effect"],
+                correct: 1 // Electronegativity
+            }
+        ];
+
+        // Global Variables
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(50).fill(null);
+        let timerInterval;
+        let timeLeft = 2400; // 40 minutes in seconds (40 * 60)
+        let quizStartTime;
+
+        // Initialize
+        window.onload = function() {
+            // Nothing to initialize
+        };
+
+        // Quiz Functions
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(50).fill(null);
+            timeLeft = 2400; // Reset timer to 40 minutes
+
+            document.getElementById('quizOverlay').style.display = 'flex';
+            
+            startTimer();
+            displayQuestion();
+            updateQuestionNav();
+        }
+
+        function closeQuiz() {
+            clearInterval(timerInterval);
+            document.getElementById('quizOverlay').style.display = 'none';
+        }
+
+        function startTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                // Update timer color based on time left
+                const timerElement = document.getElementById('timer');
+                if (timeLeft <= 60) { // Last minute
+                    timerElement.className = 'timer danger';
+                } else if (timeLeft <= 300) { // Last 5 minutes
+                    timerElement.className = 'timer warning';
+                } else {
+                    timerElement.className = 'timer';
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitQuiz();
+                }
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timeDisplay').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function displayQuestion() {
+            const question = questions[currentQuestionIndex];
+            
+            const container = document.getElementById('questionContainer');
+            
+            let html = `
+                <div class="question-card">
+                    <div class="question-text">
+                        <strong>Q${currentQuestionIndex + 1}.</strong> ${question.question}
+                    </div>
+                    <div class="options-grid">
+            `;
+            
+            question.options.forEach((option, index) => {
+                const isSelected = userAnswers[currentQuestionIndex] === index;
+                const optionLetter = String.fromCharCode(97 + index); // a, b, c, d
+                html += `
+                    <div class="option ${isSelected ? 'selected' : ''}" onclick="selectOption(${index})">
+                        <input type="radio" name="question" value="${index}" ${isSelected ? 'checked' : ''}>
+                        <label><strong>(${optionLetter})</strong> ${option}</label>
+                    </div>
+                `;
+            });
+            
+            html += `</div></div>`;
+            
+            container.innerHTML = html;
+            
+            // Update progress
+            document.getElementById('questionCounter').textContent = 
+                `Question ${currentQuestionIndex + 1} of 50`;
+            document.getElementById('progressFill').style.width = 
+                `${((currentQuestionIndex + 1) / 50) * 100}%`;
+            
+            // Update buttons
+            document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === 49) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'block';
+            } else {
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('submitBtn').style.display = 'none';
+            }
+
+            updateQuestionNav();
+        }
+
+        function selectOption(optionIndex) {
+            userAnswers[currentQuestionIndex] = optionIndex;
+            
+            // Update UI
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, index) => {
+                if (index === optionIndex) {
+                    opt.classList.add('selected');
+                    opt.querySelector('input').checked = true;
+                } else {
+                    opt.classList.remove('selected');
+                }
+            });
+
+            updateQuestionNav();
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < 49) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+
+        function updateQuestionNav() {
+            const navContainer = document.getElementById('questionNav');
+            let html = '';
+
+            for (let i = 0; i < 50; i++) {
+                let btnClass = 'nav-btn';
+                if (i === currentQuestionIndex) {
+                    btnClass += ' active';
+                }
+                if (userAnswers[i] !== null) {
+                    btnClass += ' answered';
+                }
+                html += `<button class="${btnClass}" onclick="jumpToQuestion(${i})">${i + 1}</button>`;
+            }
+
+            navContainer.innerHTML = html;
+        }
+
+        function jumpToQuestion(index) {
+            currentQuestionIndex = index;
+            displayQuestion();
+        }
+
+        function submitQuiz() {
+            clearInterval(timerInterval);
+            
+            const unanswered = userAnswers.filter(a => a === null).length;
+            
+            if (unanswered > 0) {
+                if (!confirm(`Aapne ${unanswered} questions answer nahi kiye hain. Phir bhi submit karna chahte hain?`)) {
+                    startTimer();
+                    return;
+                }
+            }
+            
+            // Calculate score
+            let score = 0;
+            userAnswers.forEach((answer, index) => {
+                if (answer === questions[index].correct) {
+                    score++;
+                }
+            });
+            
+            const percentage = (score / 50) * 100;
+            
+            // Calculate time taken
+            const timeTakenMinutes = Math.floor((2400 - timeLeft) / 60);
+            const timeTakenSeconds = (2400 - timeLeft) % 60;
+            const timeTaken = timeTakenMinutes + ':' + timeTakenSeconds.toString().padStart(2, '0');
+            
+            // Show results
+            showResults(score, percentage, unanswered, timeTaken);
+        }
+
+        function showResults(score, percentage, unanswered, timeTaken) {
+            document.getElementById('quizOverlay').style.display = 'none';
+            
+            document.getElementById('scorePercentage').textContent = `${Math.round(percentage)}%`;
+            document.getElementById('scoreMarks').textContent = `${score} / 50`;
+            document.getElementById('correctCount').innerHTML = 
+                `<i class="fas fa-check-circle" style="color: #28a745;"></i> Correct: ${score}`;
+            
+            const incorrect = 50 - score - unanswered;
+            document.getElementById('incorrectCount').innerHTML = 
+                `<i class="fas fa-times-circle" style="color: #dc3545;"></i> Incorrect: ${incorrect}`;
+            document.getElementById('unansweredCount').innerHTML = 
+                `<i class="fas fa-question-circle" style="color: #ffc107;"></i> Unanswered: ${unanswered}`;
+            document.getElementById('timeTaken').innerHTML = 
+                `<i class="fas fa-hourglass-half"></i> Time Taken: ${timeTaken}`;
+            
+            // Update progress circle
+            const circle = document.getElementById('progressCircle');
+            const circumference = 2 * Math.PI * 90;
+            const offset = circumference - (percentage / 100) * circumference;
+            circle.style.strokeDasharray = circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            // Set feedback message
+            const feedback = document.getElementById('feedbackMessage');
+            if (percentage >= 80) {
+                feedback.className = 'feedback-box excellent';
+                feedback.innerHTML = '<i class="fas fa-trophy"></i> Excellent! Aap ne bahut acha performance diya hai! (80%+)';
+            } else if (percentage >= 60) {
+                feedback.className = 'feedback-box good';
+                feedback.innerHTML = '<i class="fas fa-smile"></i> Good job! Thori aur practice se aap perfect score la sakte hain. (60-79%)';
+            } else if (percentage >= 40) {
+                feedback.className = 'feedback-box good';
+                feedback.innerHTML = '<i class="fas fa-meh"></i> Achha try! Aur practice ki zaroorat hai. (40-59%)';
+            } else {
+                feedback.className = 'feedback-box needs-work';
+                feedback.innerHTML = '<i class="fas fa-book"></i> Keep practicing! Aap improve kar sakte hain. (Below 40%)';
+            }
+            
+            document.getElementById('resultOverlay').style.display = 'flex';
+        }
+
+        function closeResult() {
+            document.getElementById('resultOverlay').style.display = 'none';
+        }
+
+        function restartQuiz() {
+            closeResult();
+            startQuiz();
+        }
+    </script>
+</body>
+</html>
